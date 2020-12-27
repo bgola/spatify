@@ -1,0 +1,76 @@
+<script>
+    function createPeerConnection(ws) {
+        var pc = new RTCPeerConnection({iceServers: []});
+        pc.onicecandidate = function(candidate) {
+            if (candidate.candidate != null) {
+                ws.send(JSON.stringify({candidate: candidate.candidate}));
+            }
+        }
+        
+        pc.addEventListener("connectionstatechange", event => {
+        });
+
+        pc.addEventListener("iceconnectionstatechange", event => {
+            if (pc.iceConnectionState === "failed") {
+                pc.restartIce();
+            }
+        });
+
+        pc.addEventListener('track', function (evt) { 
+            document.getElementById('audio').srcObject = evt.streams[0];
+            document.getElementById('audio').volume = 1;
+            window.audio = audio;
+            document.getElementById('audio').play();
+
+            /*
+            setTimeout(function() {
+            pc.getSenders().forEach(function(sender) {
+                sender.track.stop();
+            });
+            }, 500);
+            */
+        })
+
+        pc.onnegotiationneeded = async () => await negotiate(ws, pc);
+
+        return pc;
+    }
+
+    async function negotiate(ws, pc) {
+        offer = await pc.createOffer({offerToReceiveAudio: true});
+        await pc.setLocalDescription(offer);
+        offer = pc.localDescription;
+        ws.send(JSON.stringify({sdp: offer.sdp, type: offer.type}));
+    }
+
+    async function start() {
+        // Change this to your Spatify server IP
+        let ws = new WebSocket("wss://localhost:8765/");
+        let pc = createPeerConnection(ws);
+        ws.onmessage = function (message) {
+            var data = JSON.parse(message.data);
+            if (data.id) {
+                id = data.id;
+            }
+            if (data.type == 'answer') {
+                pc.setRemoteDescription(data)           
+            }
+        }
+
+        let constraints = {
+            audio: {
+                echoCancellation: false,
+                autoGainControl: false,
+                noiseSuppression: false,
+                volume: 1.0
+              },
+            video: false
+        };
+        let stream = await navigator.mediaDevices.getUserMedia(constraints);
+        tracks = stream.getTracks();
+        tracks.forEach( (track) => pc.addTrack(track, stream) );
+        await negotiate(ws, pc);
+    }
+</script>
+<div><button onclick="start();">start connection</button></div>
+<audio id="audio" controls></audio>
