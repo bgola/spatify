@@ -17,7 +17,7 @@ You will need Python >= 3.7 together with websockets and aiortc python libraries
 $ git clone git@github.com:bgola/spatify.git
 $ cd spatify/
 $ pip install websockets aiortc
-$ pip install setup.py
+$ python setup.py install
 ```
 
 # Running
