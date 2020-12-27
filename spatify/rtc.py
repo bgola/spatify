@@ -58,7 +58,7 @@ class RTCClient:
         self.id = identifier
         self.peer_connection = RTCPeerConnection()
         self.signaling = None
-        self.jack_client_name = f"bruto_{self.id}"
+        self.jack_client_name = f"spatify_{self.id}"
         RTCClient.registry[self.id] = self
 
     def send(self, message):
