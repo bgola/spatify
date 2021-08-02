@@ -41,7 +41,7 @@ optional arguments:
 # Checking the example
 
 In the examples/ folder there is an HTML/JavaScript example for using WebSockets as
-signaling mechanism and estabilishing the WebRTC streams. Notice that the example
+signaling mechanism and establishing the WebRTC streams. Notice that the example
 uses a self-signed SSL certificafe because you can't start the WebRTC stream over an 
 unsecured connection (you need HTTPS). Your browser might complain that the certificate is
 not to be trusted. Also, some browsers might fail to initiate the secure WebSocket
