@@ -14,7 +14,7 @@ speakers in installations or performances.
 You will need Python >= 3.7 together with websockets and aiortc python libraries.
 
 ```
-$ git clone git@github.com:bgola/spatify.git
+$ git clone https://github.com/bgola/spatify.git
 $ cd spatify/
 $ pip install websockets aiortc
 $ python setup.py install
