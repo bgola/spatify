@@ -60,7 +60,7 @@ and on another terminal run spatify:
 
 ```
 $ cd examples/
-$ spatify --crt localhost.cert --key localhost.key
+$ spatify --cert localhost.crt --key localhost.key
 2020-12-12 15:25,509 Listening for websocket signaling on 0.0.0.0:8765
 ```
 
